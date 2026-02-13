@@ -243,51 +243,152 @@ const handlePlanAction = (plan: Plan) => {
     e.preventDefault();
     const form = e.currentTarget;
     const identifier = (form.elements.namedItem("loginEmail") as HTMLInputElement).value;
-    const password = (form.elements.namedItem("loginPassword") as HTMLInputElement)?.value || "";  // Password might be hidden
+    
+    // Get password value only if the field exists and is visible
+    const passwordInput = form.elements.namedItem("loginPassword") as HTMLInputElement;
+    const password = passwordInput ? passwordInput.value : "";
+
+    // Check if password container is visible
+    const passwordContainer = document.getElementById("passwordContainer");
+    const isPasswordVisible = passwordContainer && !passwordContainer.classList.contains("hidden");
 
     setShowLoadingOverlay(true);
     const loginError = document.getElementById("loginError") as HTMLElement;
 
     try {
-      const res = await fetch(`${API_BASE}/api/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ identifier, password }),  // Adjust based on API (email or username as identifier)
-      });
+      // If password is visible (user has entered prefetch stage), proceed with login
+      if (isPasswordVisible) {
+        if (!password) {
+          throw new Error("Password is required");
+        }
 
-      const data = await res.json();
+        const res = await fetch(`${API_BASE}/api/auth/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ 
+            email: identifier,  // Use email as field name
+            password: password 
+          }),
+        });
 
-      if (!res.ok) {
-        const errorMsg = data.detail || data.message || "Invalid credentials";
-        loginError.textContent = errorMsg;
-        loginError.classList.remove("hidden");
+        const data = await res.json();
+
+        if (!res.ok) {
+          const errorMsg = data.detail || data.message || "Invalid credentials";
+          loginError.textContent = errorMsg;
+          loginError.classList.remove("hidden");
+          if (typeof window !== "undefined" && (window as any).Toastify) {
+            (window as any).Toastify({
+              text: errorMsg,
+              duration: 3000,
+              gravity: "top",
+              position: "right",
+              backgroundColor: "#dc2626",
+              style: { borderRadius: "15px" }
+            }).showToast();
+          }
+          throw new Error(errorMsg);
+        }
+
+        localStorage.setItem("token", data.access_token || data.token);
+        const successMsg = data.message || "Login successful!";
+        setShowLoginModal(false);
         if (typeof window !== "undefined" && (window as any).Toastify) {
           (window as any).Toastify({
-            text: errorMsg,
-            duration: 3000,
+            text: successMsg,
+            duration: 2000,
             gravity: "top",
             position: "right",
-            backgroundColor: "#dc2626",
+            backgroundColor: "#16a34a",
             style: { borderRadius: "15px" }
           }).showToast();
         }
-        throw new Error(errorMsg);
-      }
+        
+        // Redirect to dashboard or reload
+        if (data.access_token) {
+          window.location.href = `${window.location.origin}/dashboard?token=${data.access_token}`;
+        } else {
+          window.location.reload();
+        }
+      } else {
+        // First step - check if user exists (prefetch)
+        const res = await fetch(`${API_BASE}/api/auth/prefetch`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ 
+            email: identifier,
+            plan_id: selectedPlan ? selectedPlan.id : null 
+          }),
+        });
 
-      localStorage.setItem("token", data.token);
-      const successMsg = data.message || "Login successful!";
-      setShowLoginModal(false);
-      if (typeof window !== "undefined" && (window as any).Toastify) {
-        (window as any).Toastify({
-          text: successMsg,
-          duration: 2000,
-          gravity: "top",
-          position: "right",
-          backgroundColor: "#16a34a",
-          style: { borderRadius: "15px" }
-        }).showToast();
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.detail || data.message || "User not found");
+        }
+
+        // Handle different next actions
+        if (data.next_action === 'LOGIN') {
+          // Show password field
+          passwordContainer?.classList.remove('hidden');
+          document.getElementById('forgotPasswordContainer')?.classList.remove('hidden');
+          // Clear any existing password value
+          if (passwordInput) {
+            passwordInput.value = '';
+          }
+          setShowLoadingOverlay(false);
+          loginBtn.disabled = false;
+          passwordInput?.focus();
+          return;
+        } 
+        else if (data.next_action === 'COMPLETE_PAYMENT') {
+          if (typeof window !== "undefined" && (window as any).Toastify) {
+            (window as any).Toastify({
+              text: 'Payment link sent to your registered email',
+              duration: 2000,
+              gravity: 'top',
+              position: 'right',
+              style: { borderRadius: '15px', background: '#16a34a' }
+            }).showToast();
+          }
+          setShowLoadingOverlay(false);
+          setShowLoginModal(false);
+          return;
+        }
+        else if (data.next_action === 'CHOOSE_PLAN') {
+          setShowLoadingOverlay(false);
+          if (typeof window !== "undefined" && (window as any).Toastify) {
+            (window as any).Toastify({
+              text: 'Please choose a plan first',
+              duration: 2000,
+              gravity: 'top',
+              position: 'right',
+              style: { borderRadius: '15px', background: '#dc2626' }
+            }).showToast();
+          }
+          setShowLoginModal(false);
+          // Scroll to plans section
+          const pricingSection = document.getElementById('pricing');
+          if (pricingSection) {
+            pricingSection.scrollIntoView({ behavior: 'smooth' });
+          }
+          return;
+        }
+        else if (data.next_action === 'SET_PASSWORD') {
+          setShowLoadingOverlay(false);
+          if (typeof window !== "undefined" && (window as any).Toastify) {
+            (window as any).Toastify({
+              text: 'Password setup link sent to your registered email',
+              duration: 2000,
+              gravity: 'top',
+              position: 'right',
+              style: { borderRadius: '15px', background: '#16a34a' }
+            }).showToast();
+          }
+          setShowLoginModal(false);
+          return;
+        }
       }
-      // Proceed with plan action or reload
     } catch (err: any) {
       const errorMsg = err.message || "Login failed. Please try again.";
       loginError.textContent = errorMsg;
