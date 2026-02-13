@@ -44,7 +44,7 @@ export default function HomePage() {
             <a href="#" className="login-link" onClick={(e) => { e.preventDefault(); (typeof window !== "undefined" && (window as any).openLoginModal)?.(); }}>
               Login
             </a>
-            <a href="#" className="cta-btn mr-3" onClick={(e) => { e.preventDefault(); (typeof window !== "undefined" && (window as any).openLoginModal)?.(); }}>
+            <a href="#pricing" className="cta-btn mr-3" >
               Get Started
             </a>
           </div>
