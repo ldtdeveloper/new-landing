@@ -14,6 +14,7 @@ type Plan = {
   wallet_credits?: number;
   features?: string[];
   code?: string;
+  minutes?: number;
 };
 
 export function PricingPlans() {
@@ -329,7 +330,7 @@ const handlePlanAction = (plan: Plan) => {
 
   return (
     <>
-      <div className="grid md:grid-cols-3 gap-8">
+      <div className="grid md:grid-cols-3 gap-0 w-full">
         {plans.map((plan, index) => {
           const isActive = activePlanId === plan.id;
           const isPopular = index === 1;
@@ -340,7 +341,7 @@ const handlePlanAction = (plan: Plan) => {
             <div
               key={plan.id}
               onClick={() => setActivePlanId(plan.id)}
-              className={`pricing-card rounded-2xl p-[1px] transition duration-300 cursor-pointer
+              className={`pricing-card rounded-2xl p-[1px] transition duration-300 cursor-pointer w-[72%] mx-auto
                 ${
                   isActive
                     ? "bg-gradient-to-br from-cyan-400 to-purple-500 shadow-[0_0_40px_rgba(168,85,247,0.5)]"
@@ -370,11 +371,23 @@ const handlePlanAction = (plan: Plan) => {
                     <>
                       <span className="text-4xl font-extrabold text-pink-400">$0.00</span>
                       <span className="text-gray-400 text-sm"> /14 Days</span>
+                      {plan.minutes && (
+                        <span className="text-gray-400 text-sm ml-2">
+                          / {plan.minutes} minutes
+                        </span>
+                      )}
                     </>
                   ) : plan.price ? (
-                    <span className="text-4xl font-extrabold text-pink-400">
-                      ${plan.price}
-                    </span>
+                    <>
+                      <span className="text-4xl font-extrabold text-pink-400">
+                        ${plan.price}
+                      </span>
+                      {plan.minutes && (
+                        <span className="text-gray-400 text-sm ml-2">
+                          / {plan.minutes} minutes
+                        </span>
+                      )}
+                    </>
                   ) : (
                     <span className="text-4xl font-extrabold text-pink-400">
                       Custom

@@ -372,8 +372,8 @@ export default function HomePage() {
 
       {/* Pricing Section - container for script.js to inject plans */}
       <section id="pricing" className="py-20 md:py-28 bg-gradient-to-b from-[#0f0f1a] to-[#140f24] relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+        <div className="w-full px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16 max-w-7xl mx-auto">
             <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
               Simple <span className="bg-gradient-to-r from-indigo-400 to-pink-500 bg-clip-text text-transparent">Pricing</span>
             </h2>
