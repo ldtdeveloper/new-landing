@@ -73,27 +73,27 @@ export function PricingPlans() {
         
         // Show success toast for plans loaded
         if (typeof window !== "undefined" && (window as any).Toastify) {
-          (window as any).Toastify({
-            text: `Loaded ${active.length} plan${active.length !== 1 ? 's' : ''} successfully`,
-            duration: 2000,
-            gravity: "top",
-            position: "right",
-            backgroundColor: "#16a34a",
-            style: { borderRadius: "15px" }
-          }).showToast();
+          // (window as any).Toastify({
+          //   text: `Loaded ${active.length} plan${active.length !== 1 ? 's' : ''} successfully`,
+          //   duration: 2000,
+          //   gravity: "top",
+          //   position: "right",
+          //   backgroundColor: "#16a34a",
+          //   style: { borderRadius: "15px" }
+          // }).showToast();
         }
       } catch (err: any) {
         const errorMsg = err.message || "Failed to fetch plans";
         setError(errorMsg);
         if (typeof window !== "undefined" && (window as any).Toastify) {
-          (window as any).Toastify({
-            text: errorMsg,
-            duration: 3000,
-            gravity: "top",
-            position: "right",
-            backgroundColor: "#dc2626",
-            style: { borderRadius: "15px" }
-          }).showToast();
+          // (window as any).Toastify({
+          //   text: errorMsg,
+          //   duration: 3000,
+          //   gravity: "top",
+          //   position: "right",
+          //   backgroundColor: "#dc2626",
+          //   style: { borderRadius: "15px" }
+          // }).showToast();
         }
       } finally {
         setLoading(false);
@@ -330,7 +330,7 @@ const handlePlanAction = (plan: Plan) => {
 
   return (
     <>
-      <div className="grid md:grid-cols-3 gap-0 w-full">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 w-full max-w-7xl mx-auto px-4">
         {plans.map((plan, index) => {
           const isActive = activePlanId === plan.id;
           const isPopular = index === 1;
@@ -341,12 +341,9 @@ const handlePlanAction = (plan: Plan) => {
             <div
               key={plan.id}
               onClick={() => setActivePlanId(plan.id)}
-              className={`pricing-card rounded-2xl p-[1px] transition duration-300 cursor-pointer w-[72%] mx-auto
-                ${
-                  isActive
-                    ? "bg-gradient-to-br from-cyan-400 to-purple-500 shadow-[0_0_40px_rgba(168,85,247,0.5)]"
-                    : "bg-white/5"
-                }`}
+              className={`pricing-card rounded-2xl p-[1px] transition duration-300 cursor-pointer
+                ${isActive ? "bg-gradient-to-br from-cyan-400 to-purple-500 shadow-[0_0_40px_rgba(168,85,247,0.5)]" : "bg-white/5"}
+              `}
             >
               <div className="bg-[#151527] rounded-2xl p-8 h-full flex flex-col">
 
@@ -358,7 +355,7 @@ const handlePlanAction = (plan: Plan) => {
                   </div>
                 )}
 
-                <h3 className="text-2xl font-bold text-white mb-2">
+                <h3 className="text-2xl font-bold text-white mb-2 capitalize">
                   {plan.name}
                 </h3>
 

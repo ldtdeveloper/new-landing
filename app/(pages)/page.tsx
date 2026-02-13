@@ -23,36 +23,100 @@ export default function HomePage() {
         />
       </div>
 
-      {/* Navigation */}
-      <nav className="main-navbar">
-        <div className="nav-inner">
-          <div className="nav-logo w-32">
-            <img src={`${IMG}/logo.png`} alt="Voice Quick" />
+      {/* Navigation - Pill Navbar Style (Exact Match to Provided HTML) */}
+      <nav className="main-navbar fixed top-0 left-0 right-0 z-50 px-6 py-4">
+        <div className="nav-inner flex items-center justify-between py-2.5 px-7 rounded-full bg-white backdrop-blur-xl border border-purple-500/30 shadow-2xl max-w-5xl mx-auto gap-4">
+          {/* Logo */}
+          <div className="nav-logo flex-shrink-0">
+            <img 
+              src={`${IMG}/logo.png`} 
+              alt="Voice Quick" 
+              className="w-28 h-auto block sm:w-32" 
+            />
           </div>
-          <div className="nav-center">
-            <a href="#features" className="nav-link">
-              Features <span className="nav-dot" />
+
+          {/* Center Links - Hidden on mobile/tablet, shown on md+ */}
+          <div className="nav-center hidden md:flex items-center gap-8 flex-1 justify-center">
+            <a href="#features" className="nav-link text-sm font-medium text-black hover:text-purple-600 transition">
+              Features
             </a>
-            <a href="#how-it-works" className="nav-link">
-              How it Works <span className="nav-dot" />
+            <a href="#how-it-works" className="nav-link text-sm font-medium text-black hover:text-purple-600 transition">
+              How it Works
             </a>
-            <a href="#pricing" className="nav-link">
-              Pricing <span className="nav-dot" />
+            <a href="#pricing" className="nav-link text-sm font-medium text-black hover:text-purple-600 transition">
+              Pricing
             </a>
           </div>
-          <div className="nav-right">
-            <a href="#" className="login-link" onClick={(e) => { e.preventDefault(); (typeof window !== "undefined" && (window as any).openLoginModal)?.(); }}>
+
+          {/* Right Side */}
+          <div className="nav-right flex items-center gap-4 flex-shrink-0">
+            {/* Login - Hidden on very small screens */}
+            <a 
+              href="#" 
+              className="login-link text-sm font-medium text-black hover:text-purple-600 transition hidden sm:inline-block"
+              onClick={(e) => { 
+                e.preventDefault(); 
+                if (typeof window !== "undefined" && (window as any).openLoginModal) {
+                  (window as any).openLoginModal();
+                }
+              }}
+            >
               Login
             </a>
-            <a href="#pricing" className="cta-btn mr-3" >
+
+            {/* Get Started Button */}
+            <a 
+              href="#pricing" 
+              className="cta-btn bg-gradient-to-br from-purple-600 to-pink-600 text-white font-semibold text-sm px-6 py-2.5 rounded-full hover:opacity-90 transition"
+            >
               Get Started
             </a>
           </div>
         </div>
+
+        {/* Tablet Adjustments */}
+        <style jsx>{`
+          @media (max-width: 900px) {
+            .nav-inner {
+              padding: 8px 20px !important;
+              gap: 12px !important;
+            }
+            .nav-center {
+              gap: 20px !important;
+            }
+            .nav-link {
+              font-size: 13px !important;
+            }
+            .nav-right {
+              gap: 12px !important;
+            }
+          }
+
+          /* Mobile - Hide center & login, smaller elements */
+          @media (max-width: 640px) {
+            .nav-center {
+              display: none !important;
+            }
+            .nav-inner {
+              padding: 8px 18px !important;
+              gap: 0 !important;
+            }
+            .login-link {
+              display: none !important;
+            }
+            .nav-logo img {
+              width: 90px !important;
+            }
+            .cta-btn {
+              font-size: 13px !important;
+              padding: 8px 16px !important;
+            }
+          }
+        `}</style>
       </nav>
 
       {/* Hero Section */}
-      <section className="min-h-screen flex items-center pt-16 md:pt-0 relative">
+      <section className="mt-24 min-h-screen flex items-center pt-16 md:pt-0 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div className="space-y-6 md:space-y-8 text-center lg:text-left order-2 lg:order-1">
@@ -72,7 +136,7 @@ export default function HomePage() {
                 <button
                   type="button"
                   onClick={() => typeof window !== "undefined" && (window as any).openLoginModal?.()}
-                  className="btn-gradient px-8 py-4 rounded-full text-white font-semibold text-lg flex items-center justify-center space-x-2"
+                  className="btn-gradient px-6 sm:px-8 py-3 sm:py-4 rounded-full text-white font-semibold text-base sm:text-lg flex items-center justify-center space-x-2"
                 >
                   <span>Start Building Free</span>
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -83,7 +147,7 @@ export default function HomePage() {
                   href="#how-it-works"
                   className="relative inline-flex items-center justify-center p-[2px] rounded-full bg-gradient-to-r from-purple-600 via-pink-500 to-indigo-500"
                 >
-                  <span className="bg-white text-purple-700 px-8 py-4 rounded-full font-semibold text-lg flex items-center space-x-2 hover:bg-gray-100 transition">
+                  <span className="bg-white text-purple-700 px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold text-base sm:text-lg flex items-center space-x-2 hover:bg-gray-100 transition">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -137,18 +201,88 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Channel Section */}
-      <section className="channel-section">
+      {/* Channel Section - Mobile Responsive Fix */}
+      <section className="channel-section py-12 sm:py-16 md:py-20 lg:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold mb-4 px-4">
             <span className="channel-gradient-text">One AI Voice Assistant for Every Channel</span>
           </h2>
-          <p className="text-base md:text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-sm sm:text-base md:text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed px-4 mb-8 sm:mb-12">
             Design and manage an AI Voice Bot that operates seamlessly across voice, chat, SMS, and digital channels. Voicequik delivers unified conversations with built-in compliance, reliability, and real-time insights.
           </p>
-          <div className="channel-arc-wrapper">
-            <div className="channel-rings-container" aria-hidden>
-              <svg className="channel-rings-svg" viewBox="0 0 900 520" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+
+          {/* Mobile Version: Simple vertical/grid cards - clean & easy to tap */}
+          <div className="block lg:hidden">
+            <div className="grid grid-cols-3 sm:grid-cols-5 gap-6 sm:gap-8 max-w-3xl mx-auto">
+              {/* EMAIL */}
+              <div className="flex flex-col items-center">
+                <div className="channel-icon-box w-12 h-12 sm:w-16 sm:h-16">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="2" y="4" width="20" height="16" rx="2" />
+                    <path d="M2 7l10 7 10-7" />
+                  </svg>
+                </div>
+                <span className="channel-label mt-3 text-sm sm:text-base">EMAIL</span>
+              </div>
+
+              {/* CHAT */}
+              <div className="flex flex-col items-center">
+                <div className="channel-icon-box w-12 h-12 sm:w-16 sm:h-16">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+                    <circle cx="9" cy="10" r="1" fill="currentColor" />
+                    <circle cx="12" cy="10" r="1" fill="currentColor" />
+                    <circle cx="15" cy="10" r="1" fill="currentColor" />
+                  </svg>
+                </div>
+                <span className="channel-label mt-3 text-sm sm:text-base">CHAT</span>
+              </div>
+
+              {/* WHATSAPP */}
+              <div className="flex flex-col items-center">
+                <div className="channel-icon-box w-12 h-12 sm:w-16 sm:h-16">
+                  <svg viewBox="0 0 24 24" fill="currentColor" style={{ color: "#7c3aed" }}>
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                  </svg>
+                </div>
+                <span className="channel-label mt-3 text-sm sm:text-base">WHATSAPP</span>
+              </div>
+
+              {/* SMS */}
+              <div className="flex flex-col items-center">
+                <div className="channel-icon-box w-12 h-12 sm:w-16 sm:h-16">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ color: "#7c3aed" }}>
+                    <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+                    <line x1="8" y1="10" x2="8.01" y2="10" strokeWidth="3" />
+                    <line x1="12" y1="10" x2="12.01" y2="10" strokeWidth="3" />
+                    <line x1="16" y1="10" x2="16.01" y2="10" strokeWidth="3" />
+                  </svg>
+                </div>
+                <span className="channel-label mt-3 text-sm sm:text-base">SMS</span>
+              </div>
+
+              {/* VOICE - larger icon in center */}
+              <div className="flex flex-col items-center col-span-3 sm:col-span-1 order-first sm:order-none mb-6 sm:mb-0">
+                <div className="channel-icon-box channel-voice-icon w-16 h-16 sm:w-20 sm:h-20">
+                  <svg viewBox="0 0 40 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="0" y="10" width="4" height="8" rx="2" fill="white" />
+                    <rect x="6" y="6" width="4" height="16" rx="2" fill="white" />
+                    <rect x="12" y="2" width="4" height="24" rx="2" fill="white" />
+                    <rect x="18" y="0" width="4" height="28" rx="2" fill="white" />
+                    <rect x="24" y="2" width="4" height="24" rx="2" fill="white" />
+                    <rect x="30" y="6" width="4" height="16" rx="2" fill="white" />
+                    <rect x="36" y="10" width="4" height="8" rx="2" fill="white" />
+                  </svg>
+                </div>
+                <span className="channel-label channel-voice-label mt-3 text-base sm:text-lg font-semibold">VOICE</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Desktop Version: Exact original arc layout (unchanged) */}
+          <div className="hidden lg:block channel-arc-wrapper relative mt-12 max-w-5xl mx-auto">
+            <div className="channel-rings-container relative w-full" aria-hidden>
+              <svg className="channel-rings-svg w-full h-auto" viewBox="0 0 900 520" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
                 <path d="M 60 460 A 390 390 0 0 1 840 460" stroke="rgba(140,80,255,0.28)" strokeWidth="1.5" fill="none" />
                 <path d="M 120 460 A 330 330 0 0 1 780 460" stroke="rgba(140,80,255,0.22)" strokeWidth="1.5" fill="none" />
                 <path d="M 190 460 A 260 260 0 0 1 710 460" stroke="rgba(140,80,255,0.18)" strokeWidth="1.5" fill="none" />
@@ -223,40 +357,40 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Launch AI Voice Bot Section */}
-      <section className="w-full launch-section flex items-stretch justify-center py-16 md:py-24">
-        <div className="launch-features w-[10%] flex flex-col items-start justify-center">
-          <div className="feature-card">
-            <img className="w-16 mx-auto" src={`${IMG}/online.png`} alt="Online Shopping Support" />
-            <span className="text-black text-sm">Online Shopping Support</span>
+      {/* Launch AI Voice Bot Section - Mobile Responsive Fix */}
+      <section className="w-full launch-section flex flex-col lg:flex-row items-stretch justify-center py-12 md:py-16 lg:py-24 px-4 sm:px-6">
+        <div className="launch-features w-full lg:w-[10%] flex flex-row lg:flex-col items-center lg:items-start justify-center gap-4 lg:gap-6 mb-8 lg:mb-0 flex-wrap">
+          <div className="feature-card w-36 sm:w-40 lg:w-auto">
+            <img className="w-12 sm:w-16 mx-auto" src={`${IMG}/online.png`} alt="Online Shopping Support" />
+            <span className="text-black text-xs sm:text-sm text-center">Online Shopping Support</span>
           </div>
-          <div className="feature-card">
-            <img className="w-16 mx-auto" src={`${IMG}/order.png`} alt="Order Management" />
-            <span className="text-black text-sm">Order Management</span>
+          <div className="feature-card w-36 sm:w-40 lg:w-auto">
+            <img className="w-12 sm:w-16 mx-auto" src={`${IMG}/order.png`} alt="Order Management" />
+            <span className="text-black text-xs sm:text-sm text-center">Order Management</span>
           </div>
-          <div className="feature-card">
-            <img className="w-16 mx-auto" src={`${IMG}/appointment.png`} alt="Appointment Scheduling" />
-            <span className="text-black text-sm">Appointment Scheduling</span>
+          <div className="feature-card w-36 sm:w-40 lg:w-auto">
+            <img className="w-12 sm:w-16 mx-auto" src={`${IMG}/appointment.png`} alt="Appointment Scheduling" />
+            <span className="text-black text-xs sm:text-sm text-center">Appointment Scheduling</span>
           </div>
-          <div className="feature-card">
-            <img className="w-16 mx-auto" src={`${IMG}/bank.png`} alt="Banking Assistance" />
-            <span className="text-black text-sm">Banking Assistance</span>
+          <div className="feature-card w-36 sm:w-40 lg:w-auto">
+            <img className="w-12 sm:w-16 mx-auto" src={`${IMG}/bank.png`} alt="Banking Assistance" />
+            <span className="text-black text-xs sm:text-sm text-center">Banking Assistance</span>
           </div>
         </div>
-        <div className="main w-3/5 flex ml-10 relative rounded-2xl overflow-hidden bg-gradient-to-br from-purple-900/50 to-pink-900/50 backdrop-blur-lg border border-purple-700 shadow-2xl">
-          <div className="left w-1/2">
-            <img className="w-full h-full object-cover" src={`${IMG}/aiwomen.png`} alt="AI Assistant" />
+        <div className="main w-full lg:w-3/5 flex flex-col sm:flex-row ml-0 lg:ml-10 relative rounded-2xl overflow-hidden bg-gradient-to-br from-purple-900/50 to-pink-900/50 backdrop-blur-lg border border-purple-700 shadow-2xl">
+          <div className="left w-full sm:w-1/2">
+            <img className="w-full h-48 sm:h-full object-cover" src={`${IMG}/aiwomen.png`} alt="AI Assistant" />
           </div>
-          <div className="launch-content w-1/2 text-white flex flex-col justify-between">
-            <h2 className="text-5xl ml-2 mt-6">
+          <div className="launch-content w-full sm:w-1/2 text-white flex flex-col justify-between p-4 sm:p-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl ml-0 sm:ml-2 mt-2 sm:mt-6">
               Launch an AI Voice<br />Bot in Minutes
             </h2>
-            <p className="ml-2 text-xs mt-3">
+            <p className="ml-0 sm:ml-2 text-xs sm:text-sm mt-2 sm:mt-3">
               Create an intelligent AI Voice Assistant that operates reliably across channels with built-in compliance and analytics.
             </p>
-            <button type="button" className="launch-btn">Try Live Demo</button>
-            <div>
-              <img className="h-36 w-full wave-img" src={`${IMG}/wave.png`} alt="Waveform" />
+            <button type="button" className="launch-btn w-full sm:w-auto px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base mt-4 sm:mt-0">Try Live Demo</button>
+            <div className="mt-4 sm:mt-0">
+              <img className="h-20 sm:h-24 md:h-36 w-full wave-img" src={`${IMG}/wave.png`} alt="Waveform" />
             </div>
           </div>
         </div>
@@ -450,10 +584,10 @@ export default function HomePage() {
       {/* FAQ Section */}
       <section className="py-20 md:py-28 bg-gradient-to-b from-[#0b0615] via-[#140a25] to-[#0b0615] relative">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-center mb-16 bg-gradient-to-r from-indigo-400 to-pink-500 bg-clip-text text-transparent">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-center mb-12 sm:mb-16 bg-gradient-to-r from-indigo-400 to-pink-500 bg-clip-text text-transparent">
             Frequently Asked Questions
           </h2>
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {[
               { q: "What is VoiceQuik?", a: "VoiceQuik is an AI-powered voice automation platform that enables businesses to deploy intelligent voice assistants for sales, support, and operations." },
               { q: "How fast can I deploy an AI Voice Bot with VoiceQuik?", a: "Deployment can typically be completed within days depending on your workflow complexity and integration requirements." },
@@ -461,17 +595,24 @@ export default function HomePage() {
               { q: "Is VoiceQuik secure and compliant for enterprise use?", a: "Yes. VoiceQuik follows enterprise-grade security standards, encryption protocols, and compliance requirements." },
               { q: "Which industries can benefit from VoiceQuik's AI Voice Assistant?", a: "Industries including healthcare, finance, real estate, e-commerce, logistics, and customer support teams can benefit from VoiceQuik." },
             ].map((faq) => (
-              <div key={faq.q} className="faq-item bg-[#1b1b22] rounded-2xl overflow-hidden">
-                <button type="button" className="faq-btn w-full flex justify-between items-center px-8 py-6 text-left">
-                  <span className="text-white text-lg font-medium">{faq.q}</span>
-                  <span className="faq-icon w-12 h-12 flex items-center justify-center rounded-full bg-white text-black transition-all duration-300">
+              <div key={faq.q} className="faq-item bg-[#1b1b22] rounded-2xl overflow-hidden shadow-lg">
+                <button 
+                  type="button" 
+                  className="faq-btn w-full flex justify-between items-center px-4 sm:px-6 md:px-8 py-4 sm:py-5 md:py-6 text-left transition-all duration-300 hover:bg-[#222228]"
+                >
+                  <span className="text-white text-base sm:text-lg font-medium pr-4">
+                    {faq.q}
+                  </span>
+                  <span className="faq-icon w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 flex-shrink-0 flex items-center justify-center rounded-full bg-white text-black transition-all duration-300">
                     <svg className="w-5 h-5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                     </svg>
                   </span>
                 </button>
                 <div className="faq-content max-h-0 overflow-hidden transition-all duration-500">
-                  <p className="px-8 pb-6 text-gray-300">{faq.a}</p>
+                  <p className="px-4 sm:px-6 md:px-8 pb-5 sm:pb-6 text-gray-300 text-sm sm:text-base leading-relaxed">
+                    {faq.a}
+                  </p>
                 </div>
               </div>
             ))}
