@@ -25,17 +25,32 @@ export function PricingPlans() {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showLoadingOverlay, setShowLoadingOverlay] = useState(false);
   const [showSalesModal, setShowSalesModal] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
 
   useEffect(() => {
     async function fetchPlans() {
       try {
         const res = await fetch(`${API_BASE}/api/plans/public`);
-        if (!res.ok) throw new Error("Failed to fetch plans");
+        const data = await res.json();
 
-        const data: Plan[] = await res.json();
+        if (!res.ok) {
+          const errorMsg = data.detail || data.message || "Failed to fetch plans";
+          setError(errorMsg);
+          if (typeof window !== "undefined" && (window as any).Toastify) {
+            (window as any).Toastify({
+              text: errorMsg,
+              duration: 3000,
+              gravity: "top",
+              position: "right",
+              backgroundColor: "#dc2626",
+              style: { borderRadius: "15px" }
+            }).showToast();
+          }
+          throw new Error(errorMsg);
+        }
 
         // ✅ Only show first 3 active plans
-        const active = data.filter((p) => p.is_active).slice(0, 3);
+        const active = data.filter((p: Plan) => p.is_active).slice(0, 3);
 
         const customPlan: Plan = {
           id: 999,
@@ -54,8 +69,31 @@ export function PricingPlans() {
         };
 
         setPlans([...active, customPlan]);
+        
+        // Show success toast for plans loaded
+        if (typeof window !== "undefined" && (window as any).Toastify) {
+          (window as any).Toastify({
+            text: `Loaded ${active.length} plan${active.length !== 1 ? 's' : ''} successfully`,
+            duration: 2000,
+            gravity: "top",
+            position: "right",
+            backgroundColor: "#16a34a",
+            style: { borderRadius: "15px" }
+          }).showToast();
+        }
       } catch (err: any) {
-        setError(err.message);
+        const errorMsg = err.message || "Failed to fetch plans";
+        setError(errorMsg);
+        if (typeof window !== "undefined" && (window as any).Toastify) {
+          (window as any).Toastify({
+            text: errorMsg,
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            backgroundColor: "#dc2626",
+            style: { borderRadius: "15px" }
+          }).showToast();
+        }
       } finally {
         setLoading(false);
       }
@@ -65,6 +103,9 @@ export function PricingPlans() {
   }, []);
 
 const handlePlanAction = (plan: Plan) => {
+  // Store the selected plan
+  setSelectedPlan(plan);
+
   // Enterprise → Sales modal
   if (plan.name === "Enterprise") {
     setShowSalesModal(true);
@@ -77,11 +118,11 @@ const handlePlanAction = (plan: Plan) => {
     return;
   }
 
-  // Paid plan → Check login
+  // Paid plan → Open register modal
   const token = localStorage.getItem("token");
 
   if (!token) {
-    setShowLoginModal(true);
+    setShowRegisterModal(true);
     return;
   }
 
@@ -91,6 +132,13 @@ const handlePlanAction = (plan: Plan) => {
 
   const switchToRegister = () => {
     setShowLoginModal(false);
+    // Preserve selected plan when switching to register
+    if (!selectedPlan && plans.length > 0) {
+      const firstActivePlan = plans.find((p) => p.is_active);
+      if (firstActivePlan) {
+        setSelectedPlan(firstActivePlan);
+      }
+    }
     setShowRegisterModal(true);
   };
 
@@ -108,25 +156,83 @@ const handlePlanAction = (plan: Plan) => {
     setShowLoadingOverlay(true);
     const registerError = document.getElementById("registerError") as HTMLElement;
 
+    // Validate plan selection
+    if (!selectedPlan || !selectedPlan.id) {
+      const errorMsg = "Please select a plan first";
+      registerError.textContent = errorMsg;
+      registerError.classList.remove("hidden");
+      setShowLoadingOverlay(false);
+      if (typeof window !== "undefined" && (window as any).Toastify) {
+        (window as any).Toastify({
+          text: errorMsg,
+          duration: 3000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#dc2626",
+          style: { borderRadius: "15px" }
+        }).showToast();
+      }
+      return;
+    }
+
     try {
-      const res = await fetch(`${API_BASE}/api/auth/register`, {  // Assuming register endpoint; adjust if needed
+      const res = await fetch(`${API_BASE}/api/auth/register-with-plan`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, email }),
+        body: JSON.stringify({ 
+          username, 
+          email,
+          plan_id: selectedPlan.id
+        }),
       });
 
+      const data = await res.json();
+
       if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.message || "Registration failed");
+        const errorMsg = data.detail || data.message || "Registration failed";
+        registerError.textContent = errorMsg;
+        registerError.classList.remove("hidden");
+        if (typeof window !== "undefined" && (window as any).Toastify) {
+          (window as any).Toastify({
+            text: errorMsg,
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            backgroundColor: "#dc2626",
+            style: { borderRadius: "15px" }
+          }).showToast();
+        }
+        throw new Error(errorMsg);
       }
 
-      // On success, perhaps switch to login or handle magic link
-      console.log("Registration successful");
+      // On success, close modal and show success message
+      const successMsg = data.message || `Registration successful! Please check your email (${email}) for the payment link.`;
       setShowRegisterModal(false);
-      setShowLoginModal(true);  // Switch to login after register
+      setShowLoadingOverlay(false);
+      if (typeof window !== "undefined" && (window as any).Toastify) {
+        (window as any).Toastify({
+          text: successMsg,
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#16a34a",
+          style: { borderRadius: "15px" }
+        }).showToast();
+      }
     } catch (err: any) {
-      registerError.textContent = err.message;
+      const errorMsg = err.message || "Registration failed. Please try again.";
+      registerError.textContent = errorMsg;
       registerError.classList.remove("hidden");
+      if (typeof window !== "undefined" && (window as any).Toastify) {
+        (window as any).Toastify({
+          text: errorMsg,
+          duration: 3000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#dc2626",
+          style: { borderRadius: "15px" }
+        }).showToast();
+      }
     } finally {
       setShowLoadingOverlay(false);
     }
@@ -148,19 +254,53 @@ const handlePlanAction = (plan: Plan) => {
         body: JSON.stringify({ identifier, password }),  // Adjust based on API (email or username as identifier)
       });
 
+      const data = await res.json();
+
       if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.message || "Invalid credentials");
+        const errorMsg = data.detail || data.message || "Invalid credentials";
+        loginError.textContent = errorMsg;
+        loginError.classList.remove("hidden");
+        if (typeof window !== "undefined" && (window as any).Toastify) {
+          (window as any).Toastify({
+            text: errorMsg,
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            backgroundColor: "#dc2626",
+            style: { borderRadius: "15px" }
+          }).showToast();
+        }
+        throw new Error(errorMsg);
       }
 
-      const data = await res.json();
       localStorage.setItem("token", data.token);
-      console.log("Login successful");
+      const successMsg = data.message || "Login successful!";
       setShowLoginModal(false);
+      if (typeof window !== "undefined" && (window as any).Toastify) {
+        (window as any).Toastify({
+          text: successMsg,
+          duration: 2000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#16a34a",
+          style: { borderRadius: "15px" }
+        }).showToast();
+      }
       // Proceed with plan action or reload
     } catch (err: any) {
-      loginError.textContent = err.message;
+      const errorMsg = err.message || "Login failed. Please try again.";
+      loginError.textContent = errorMsg;
       loginError.classList.remove("hidden");
+      if (typeof window !== "undefined" && (window as any).Toastify) {
+        (window as any).Toastify({
+          text: errorMsg,
+          duration: 3000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#dc2626",
+          style: { borderRadius: "15px" }
+        }).showToast();
+      }
     } finally {
       setShowLoadingOverlay(false);
     }
@@ -279,9 +419,20 @@ const handlePlanAction = (plan: Plan) => {
                 </div>
                 <h3 className="text-2xl font-bold text-gray-800">Create Account</h3>
                 <p className="text-gray-500 mt-2">Sign up to get started</p>
-                <div id="selectedPlanInfo" className="mt-3 px-4 py-2 bg-purple-50 rounded-lg border border-purple-200 hidden">
-                  <span className="text-sm font-medium text-purple-700">Selected Plan: <span id="planName" /> - $<span id="planPrice" />/month</span>
-                </div>
+                {selectedPlan && (
+                  <div className="mt-3 px-4 py-2 bg-purple-50 rounded-lg border border-purple-200">
+                    <span className="text-sm font-medium text-purple-700">
+                      Selected Plan: {selectedPlan.name}
+                      {selectedPlan.is_trial ? (
+                        " - Free 14 Days Trial"
+                      ) : selectedPlan.price ? (
+                        ` - $${selectedPlan.price}/month`
+                      ) : (
+                        ""
+                      )}
+                    </span>
+                  </div>
+                )}
               </div>
               <form onSubmit={handleRegister} className="space-y-5">
                 <div>
