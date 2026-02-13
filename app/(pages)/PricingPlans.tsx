@@ -337,7 +337,7 @@ const handlePlanAction = (plan: Plan) => {
             passwordInput.value = '';
           }
           setShowLoadingOverlay(false);
-          loginBtn.disabled = false;
+          // loginBtn.disabled = false;
           passwordInput?.focus();
           return;
         } 
