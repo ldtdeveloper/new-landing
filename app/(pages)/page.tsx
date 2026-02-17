@@ -200,7 +200,7 @@ export default function HomePage() {
 
       {/* Hero Section */}
       <section className="mt-24 min-h-screen flex items-center pt-16 md:pt-0 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 sm:py-12 md:py-20">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div className="space-y-6 md:space-y-8 text-center lg:text-left order-2 lg:order-1">
               <div className="inline-flex items-center space-x-2 bg-purple-900/50 backdrop-blur px-4 py-2 rounded-full shadow-md border border-purple-700 animate-fade-in">
@@ -228,9 +228,9 @@ export default function HomePage() {
                 </button>
                 <a
                   href="#how-it-works"
-                  className="relative inline-flex items-center justify-center p-[2px] rounded-full bg-gradient-to-r from-purple-600 via-pink-500 to-indigo-500"
+                  className="relative inline-flex items-center justify-center p-[2px] rounded-full bg-gradient-to-r from-purple-600 via-pink-500 to-indigo-500 w-full sm:w-auto"
                 >
-                  <span className="bg-white text-purple-700 px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold text-base sm:text-lg flex items-center space-x-2 hover:bg-gray-100 transition">
+                  <span className="bg-white text-purple-700 px-6 sm:px-8 py-3 sm:py-4 rounded-full font-semibold text-base sm:text-lg flex items-center justify-center space-x-2 hover:bg-gray-100 transition w-full">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -296,7 +296,7 @@ export default function HomePage() {
 
           {/* Mobile Version: Simple vertical/grid cards */}
           <div className="block lg:hidden">
-            <div className="grid grid-cols-3 sm:grid-cols-5 gap-6 sm:gap-8 max-w-3xl mx-auto">
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-6 sm:gap-8 max-w-3xl mx-auto">
               {/* EMAIL */}
               <div className="flex flex-col items-center">
                 <div className="channel-icon-box w-12 h-12 sm:w-16 sm:h-16">
@@ -345,7 +345,7 @@ export default function HomePage() {
               </div>
 
               {/* VOICE */}
-              <div className="flex flex-col items-center col-span-3 sm:col-span-1 order-first sm:order-none mb-6 sm:mb-0">
+              <div className="flex flex-col items-center col-span-2 sm:col-span-1 order-first sm:order-none mb-6 sm:mb-0">
                 <div className="channel-icon-box channel-voice-icon w-16 h-16 sm:w-20 sm:h-20">
                   <svg viewBox="0 0 40 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <rect x="0" y="10" width="4" height="8" rx="2" fill="white" />
