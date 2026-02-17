@@ -65,7 +65,7 @@ export default function HomePage() {
             {/* Login - Hidden on small screens */}
             <a
               href="#"
-              className="login-link text-sm font-medium text-black hover:text-purple-600 transition hidden sm:inline-block"
+              className="login-link text-sm font-medium text-black hover:text-purple-600 transition hidden md:inline-block"
               onClick={(e) => {
                 e.preventDefault();
                 if (typeof window !== "undefined" && (window as any).openLoginModal) {
@@ -79,7 +79,7 @@ export default function HomePage() {
             {/* Get Started Button - hidden on mobile to save space */}
             <a
               href="#pricing"
-              className="cta-btn bg-gradient-to-br from-purple-600 to-pink-600 text-white font-semibold text-sm px-5 py-2.5 rounded-full hover:opacity-90 transition hidden sm:inline-flex"
+              className="cta-btn bg-gradient-to-br from-purple-600 to-pink-600 text-white font-semibold text-sm px-5 py-2.5 rounded-full hover:opacity-90 transition hidden md:inline-flex"
             >
               Get Started
             </a>
