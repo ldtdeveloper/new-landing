@@ -441,21 +441,22 @@ export default function HomePage() {
       </section>
 
       {/* Launch AI Voice Bot Section */}
-      <section className="w-full launch-section flex flex-col lg:flex-row items-stretch justify-center py-12 md:py-16 lg:py-24 px-4 sm:px-6">
-        <div className="launch-features w-full lg:w-[10%] flex flex-row lg:flex-col items-center lg:items-start justify-center gap-4 lg:gap-6 mb-8 lg:mb-0 flex-wrap">
-          <div className="feature-card w-36 sm:w-40 lg:w-auto">
-            <img className="w-12 sm:w-16 mx-auto" src={`${IMG}/online.png`} alt="Online Shopping Support" />
+    <section className="w-full launch-section flex flex-col lg:flex-row items-stretch justify-center py-12 md:py-16 lg:py-24 px-4 sm:px-6">
+        <div className="launch-features w-full lg:w-[10%] grid grid-cols-2 lg:grid-cols-1 items-start justify-items-center gap-4 lg:gap-6 mb-8 lg:mb-0">
+          <div className="feature-card w-full">
+            <img className="w-12 sm:w-16 mx-auto"  style={{ width: '48px', height: '48px', objectFit: 'contain' }}
+      src={`${IMG}/online.png`} alt="Online Shopping Support" />
             <span className="text-black text-xs sm:text-sm text-center">Online Shopping Support</span>
           </div>
-          <div className="feature-card w-36 sm:w-40 lg:w-auto">
+          <div className="feature-card w-full">
             <img className="w-12 sm:w-16 mx-auto" src={`${IMG}/order.png`} alt="Order Management" />
             <span className="text-black text-xs sm:text-sm text-center">Order Management</span>
           </div>
-          <div className="feature-card w-36 sm:w-40 lg:w-auto">
+          <div className="feature-card w-full">
             <img className="w-12 sm:w-16 mx-auto" src={`${IMG}/appointment.png`} alt="Appointment Scheduling" />
             <span className="text-black text-xs sm:text-sm text-center">Appointment Scheduling</span>
           </div>
-          <div className="feature-card w-36 sm:w-40 lg:w-auto">
+          <div className="feature-card w-full">
             <img className="w-12 sm:w-16 mx-auto" src={`${IMG}/bank.png`} alt="Banking Assistance" />
             <span className="text-black text-xs sm:text-sm text-center">Banking Assistance</span>
           </div>
